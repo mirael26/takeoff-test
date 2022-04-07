@@ -39,8 +39,9 @@ module.exports = {
       },      
       {
         test: /\.tsx?$/,
-        include: PATHS.src,
-        loader: 'awesome-typescript-loader'
+        loader: 'ts-loader',
+        exclude: /node_modules/,
+        
       },
       {
         test: /\.(jpg|png|svg)$/i,
