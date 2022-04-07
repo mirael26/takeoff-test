@@ -1,0 +1,33 @@
+{
+  "name": "takeoff-test",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Тестовое задание для frontend разработчика, компания Take Off",
+  "scripts": {
+    "build": "webpack --config webpack.prod.js",
+    "start": "webpack serve --open --config webpack.dev.js"
+  },
+  "devDependencies": {
+    "autoprefixer": "^10.4.1",
+    "awesome-typescript-loader": "^5.2.1",
+    "css-loader": "^6.5.1",
+    "css-minimizer-webpack-plugin": "^3.4.1",
+    "html-loader": "^3.1.0",
+    "html-webpack-plugin": "^5.5.0",
+    "mini-css-extract-plugin": "^2.4.5",
+    "resolve-url-loader": "^4.0.0",
+    "sass": "^1.46.0",
+    "sass-loader": "^12.4.0",
+    "webpack": "^5.65.0",
+    "webpack-cli": "^4.9.1",
+    "webpack-dev-server": "^4.7.2",
+    "webpack-merge": "^5.8.0"
+  },
+  "dependencies": {
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-redux": "^7.2.8",
+    "react-router-dom": "^6.3.0",
+    "redux": "^4.1.2"
+  }
+}
