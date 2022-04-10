@@ -12,14 +12,16 @@ module.exports = {
   output: {
     filename: 'bundle.js',
     path: PATHS.dist,
-    clean: true,  
+    publicPath: '/',
+    clean: true,
   },
+
   
   module: {
     rules: [
       {
-        test: /\.(html)$/,
-        use: ['html-loader']
+        test: /\.html$/,
+        use: 'html-loader'
       },
       {
         test:/\.(s*)css$/,
@@ -32,16 +34,13 @@ module.exports = {
       },
       {
         test: /\.(js|jsx)$/,
-        exclude: /node_modules/,
-        use: {
-            loader: 'babel-loader',
-        }
+        use: 'babel-loader',
+        exclude: /node_modules/
       },      
       {
         test: /\.tsx?$/,
-        loader: 'ts-loader',
-        exclude: /node_modules/,
-        
+        use: 'ts-loader',
+        exclude: /node_modules/        
       },
       {
         test: /\.(jpg|png|svg)$/i,
