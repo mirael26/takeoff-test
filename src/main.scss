@@ -1,1 +1,8 @@
-@import './components/app/app.scss'
+@import './scss/scaffolding.scss';
+@import './scss/variables.scss';
+@import './scss/visually-hidden.scss';
+
+@import './components/app/app.scss';
+@import './components/login/login.scss';
+@import './components/logo/logo.scss';
+@import './components/login-form/login-form.scss';
