@@ -24,7 +24,6 @@ class Login extends React.PureComponent<{}, LoginState> {
   }
 
   render(): JSX.Element {
-    // const {view} = this.state;
     const isStart = this.state.view === "start";
     return (
         <div className="login">
