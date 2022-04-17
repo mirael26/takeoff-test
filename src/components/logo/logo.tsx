@@ -1,12 +1,8 @@
 import * as React from "react";
 
-interface LogoProps {
-  size: "small" | "big"
-}
-
-const Logo = ({size="small"}: LogoProps) => {
+const Logo = () => {
   return (
-    <div className={`logo logo--${size}`}>
+    <div className="logo">
       <img src={require("./../../img/logo.png")} alt="Логотип TakeOff Phone Book"/>
     </div>
   );

@@ -1,0 +1,33 @@
+.login-form {
+  display: flex;
+  flex-direction: column;
+  width: 290px;
+  // opacity: 100;
+  // transition: opacity 1s;
+  // -webkit-transition: opacity 1s;
+}
+
+// .MuiTextField-root.login-form__login,
+// .MuiTextField-root.login-form__password {
+//   // width: 250px;
+//   // margin-bottom: 20px;
+// }
+
+.login-form__buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 13px;
+}
+
+.MuiButton-root.login-form__enter-button {
+  background-color: $ocean;
+
+  &:hover {
+    background-color: $ocean;
+  }
+}
+  
+.MuiButton-root.login-form__signup-button {
+  border-color: $ocean;
+  color: $ocean;
+}

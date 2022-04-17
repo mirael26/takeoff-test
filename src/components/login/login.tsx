@@ -5,42 +5,49 @@ import Logo from "../logo/logo";
 import LoginForm from "../login-form/login-form";
 
 interface LoginState {
-  view: "enter" | "login"
+  view: "start" | "login"
 }
 
 class Login extends React.PureComponent<{}, LoginState> {
   constructor(props) {
     super(props);
     this.state = {
-      view: "enter"
+      view: "start"
     };
+    this.deleteElementInTime = this.deleteElementInTime.bind(this);
+  }
+
+  deleteElementInTime(element, time) {
+    window.setTimeout(() => {
+      element.style.display = "none";
+    }, time)
   }
 
   render(): JSX.Element {
-    const {view} = this.state;
+    // const {view} = this.state;
+    const isStart = this.state.view === "start";
     return (
         <div className="login">
           <h1 className="visually-hidden">Страница логина</h1>
-          <div className="login__logo">
-            <Logo size={view == "enter" ? "big" : "small"} />
+          <div className={`login__logo login__logo--${isStart ? "big" : "small"}`}>
+            <Logo />
           </div>
           <Button
+            className={`login__start-button${isStart ? "" : " login__start-button--hiding"}`}
             variant="contained"
             size="large"
-            sx={{
-              backgroundColor: "#177c91",
-              "&:hover": {
-                backgroundColor: "#177c91"
-              }
-            }}
-            onClick={() => {
+            onClick={(evt) => {
               this.setState({
                 view: "login"
               });
-            }}>
-              Войти
+              this.deleteElementInTime(evt.target, 1000);
+            }}
+            >
+              Начать
           </Button>
-          <LoginForm />
+          {isStart
+            ? ""
+            : <LoginForm />}
         </div>
     );
   }
