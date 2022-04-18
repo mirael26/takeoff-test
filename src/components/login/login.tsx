@@ -31,21 +31,21 @@ class Login extends React.PureComponent<{}, LoginState> {
           <div className={`login__logo login__logo--${isStart ? "big" : "small"}`}>
             <Logo />
           </div>
-          <Button
-            className={`login__start-button${isStart ? "" : " login__start-button--hiding"}`}
-            variant="contained"
-            size="large"
-            onClick={(evt) => {
-              this.setState({
-                view: "login"
-              });
-              this.deleteElementInTime(evt.target, 1000);
-            }}
-            >
-              Начать
-          </Button>
+          
           {isStart
-            ? ""
+            ? <Button
+              className={`login__start-button`}
+              variant="contained"
+              size="large"
+              onClick={(evt) => {
+                this.setState({
+                  view: "login"
+                });
+                this.deleteElementInTime(evt.target, 1000);
+              }}
+              >
+                Начать
+            </Button>
             : <LoginForm />}
         </div>
     );

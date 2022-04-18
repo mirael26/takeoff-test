@@ -26,10 +26,4 @@
   &:hover {
     background-color: $ocean;
   }
-
-  &--hiding {
-    opacity: 0;
-    -webkit-transition: opacity 1s;
-    transition: opacity 1s;
-  }
 }
