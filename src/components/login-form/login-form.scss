@@ -2,9 +2,9 @@
   display: flex;
   flex-direction: column;
   width: 290px;
-  // opacity: 100;
-  // transition: opacity 1s;
-  // -webkit-transition: opacity 1s;
+  opacity: 100;
+  transition: opacity 1s;
+  -webkit-transition: opacity 1s;
 }
 
 // .MuiTextField-root.login-form__login,
@@ -12,6 +12,13 @@
 //   // width: 250px;
 //   // margin-bottom: 20px;
 // }
+
+.login-form__error-text {
+  margin-top: 5px;
+  font-family: 'Roboto', Arial, Helvetica, sans-serif;
+  font-size: 16px;
+  color: $error;
+}
 
 .login-form__buttons {
   display: flex;

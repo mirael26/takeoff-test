@@ -4,12 +4,14 @@ import thunk from "redux-thunk";
 
 import {dataReducer} from "./reducers/data-reducer";
 import {userReducer} from "./reducers/user-reducer";
+import {stateReducer} from "./reducers/state-reducer";
 import { createAPI } from "./../api/api";
 import { ActionCreator } from "./action";
 
 const rootReducer = combineReducers({
   data: dataReducer,
   user: userReducer,
+  state: stateReducer,
 });
 
 const api = createAPI(
@@ -19,8 +21,7 @@ const api = createAPI(
 const store = createStore(
   rootReducer,
   composeWithDevTools(
-    applyMiddleware(thunk),
-      applyMiddleware(thunk.withExtraArgument(api))
+    applyMiddleware(thunk.withExtraArgument(api))
   )
 );
 
