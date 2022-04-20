@@ -1,0 +1,31 @@
+.message-popup {
+  display: flex;
+  flex-direction: column;
+  justify-content: space-around;
+  position: absolute;
+  top: 188px;
+  left: calc(50vw - 150px);
+  width: 300px;
+  height: 190px;
+  padding: 40px 20px 20px;
+  box-shadow: 3px 1px 5px #bbb;
+  background-color: #fff;
+  z-index: 2;
+
+}
+
+.message-popup__text {
+  display: inline-block;
+  margin-bottom: 23px;
+  font-family: "Roboto", Arial, Helvetica, sans-serif;
+  font-size: 18px;
+  text-align: center
+}
+
+.MuiButton-root.message-popup__button {
+  background-color: $ocean;
+
+  &:hover {
+    background-color: $ocean;
+  }
+}

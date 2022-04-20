@@ -3,7 +3,10 @@ import {connect} from "react-redux";
 import {AxiosInstance} from "axios";
 import {TextField, Button} from "@mui/material";
 
+import MessagePopup from "../message-popup/message-popup";
+
 import {register} from "../../store/api-actions";
+import {Popup, PopupContent} from "../../const";
 
 const Mode = {
   SIGN_IN: "signIn",
@@ -12,13 +15,14 @@ const Mode = {
 
 interface LoginFormProps {
   register({}): AxiosInstance,
-  loginError: boolean | string,
+  loginError: null | string,
+  popup: null | string,
 }
 
 interface LoginFormState {
-  mode: "signIn" | "signUp";
-  loginValue: string;
-  passwordValue: string;
+  mode: "signIn" | "signUp",
+  loginValue: string,
+  passwordValue: string,
 }
 
 class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
@@ -69,7 +73,7 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
   render(): JSX.Element {
     const isSignIn = this.state.mode === Mode.SIGN_IN;
     const {loginValue, passwordValue} = this.state;
-    const {loginError} = this.props;
+    const {loginError, popup} = this.props;
     return (
       <form
         className="login-form"
@@ -103,6 +107,7 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
           : ""}
 
         <div className="login-form__buttons">
+
         {isSignIn
           ? <React.Fragment>
               <Button className="login-form__enter-button" variant="contained" type="submit">Войти</Button>
@@ -120,13 +125,18 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
           : <Button className="login-form__signup-input-button" variant="contained" type="submit">Регистрация</Button>
           }
         </div>
-        
+
+        {popup === Popup.REGISTRATION_SUCCESSFUL
+          ? <MessagePopup text={PopupContent[popup].text} buttonText={PopupContent[popup].buttonText} path="/"/>
+          : ""
+        }
       </form>
     );
 }};
 
 const mapStateToProps = ({state}) => ({
-  loginError: state.loginError
+  loginError: state.loginError,
+  popup: state.popup,
 });
 
 const mapDispatchToProps = (dispatch) => ({

@@ -1,6 +1,7 @@
 const ActionType = {
   UPDATE_AUTH: "UPDATE_AUTH",
   UPDATE_LOGIN_ERROR: "UPDATE_LOGIN_ERROR",
+  SHOW_POPUP: "SHOW_POPUP",
 };
 
 const ActionCreator = {
@@ -12,6 +13,10 @@ const ActionCreator = {
     type: ActionType.UPDATE_LOGIN_ERROR,
     payload: loginError
   }),
+  showPopup: (popup) => ({
+    type: ActionType.SHOW_POPUP,
+    payload: popup
+  })
 };
 
 export {ActionCreator, ActionType};
