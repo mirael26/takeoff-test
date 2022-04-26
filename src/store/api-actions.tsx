@@ -27,7 +27,7 @@ const login = (userData) => (dispatch, _getState, api) => (
     .then((response) => dispatch(ActionCreator.loadUserInfo(response.data.user)))
     .then(() => dispatch(ActionCreator.updateLoginError(null)))
     .then(() => dispatch(ActionCreator.updateAuth(true)))
-    .then(() => busDispatch({ type: ActionType.REDIRECT_TO_ROUTE, payload: "/phonebook"}))
+    .then(() => busDispatch({ type: ActionType.REDIRECT_TO_ROUTE, payload: "/contacts"}))
     .catch((error) => {
       console.log(error)
       if (error.response.status !== HttpCode.LOGIN_SUCCESS) {

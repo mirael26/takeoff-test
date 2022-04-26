@@ -4,6 +4,7 @@ import useBus from "use-bus";
 
 import { ActionType } from "../../store/action";
 
+import RequireAuth from "../require-auth/require-auth";
 import PhoneBook from "../phone-book/phone-book";
 import Login from "../login/login";
 
@@ -16,7 +17,14 @@ const App = () => {
       <Routes>
         <Route path='/' element={<Navigate replace to='/login' />} />
         <Route path='/login' element={<Login />} />
-        <Route path='/phonebook' element={<PhoneBook />} />
+        <Route
+          path={'/contacts'}
+          element={
+            <RequireAuth redirectTo="/login">
+              <PhoneBook />
+            </RequireAuth>
+          }
+        />
       </Routes>
   );
 };
