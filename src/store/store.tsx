@@ -1,12 +1,12 @@
-import { createStore, combineReducers, applyMiddleware } from "redux";
-import { composeWithDevTools } from "redux-devtools-extension";
+import {createStore, combineReducers, applyMiddleware} from "redux";
+import {composeWithDevTools} from "redux-devtools-extension";
 import thunk from "redux-thunk";
 
 import {dataReducer} from "./reducers/data-reducer";
 import {userReducer} from "./reducers/user-reducer";
 import {stateReducer} from "./reducers/state-reducer";
-import { createAPI } from "./../api/api";
-import { ActionCreator } from "./action";
+import {createAPI} from "./../api/api";
+import {ActionCreator} from "./action";
 
 const rootReducer = combineReducers({
   data: dataReducer,

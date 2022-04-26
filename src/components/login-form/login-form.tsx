@@ -1,11 +1,12 @@
 import * as React from "react";
 import {connect} from "react-redux";
+import {Navigate} from "react-router-dom";
 import {AxiosInstance} from "axios";
 import {TextField, Button} from "@mui/material";
 
 import MessagePopup from "../message-popup/message-popup";
 
-import {register} from "../../store/api-actions";
+import {register, login} from "../../store/api-actions";
 import {Popup, PopupContent} from "../../const";
 
 const Mode = {
@@ -15,6 +16,7 @@ const Mode = {
 
 interface LoginFormProps {
   register({}): AxiosInstance,
+  login({}): AxiosInstance,
   loginError: null | string,
   popup: null | string,
 }
@@ -61,8 +63,13 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
 
   handleSubmit(userData) {
     this.state.mode === Mode.SIGN_IN
-      ? ""
+      ? this.signIn(userData)
       : this.signUp(userData)
+  }
+
+  signIn(userData) {
+    const {login} = this.props;
+    login(userData);
   }
 
   signUp(userData) {
@@ -143,6 +150,9 @@ const mapDispatchToProps = (dispatch) => ({
   register(userData) {
     dispatch(register(userData));
   },
+  login(userData) {
+    dispatch(login(userData));
+  },  
 });
 
 export {LoginForm};

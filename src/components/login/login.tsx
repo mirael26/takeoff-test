@@ -25,6 +25,7 @@ class Login extends React.PureComponent<{}, LoginState> {
 
   render(): JSX.Element {
     const isStart = this.state.view === "start";
+    
     return (
         <div className="login">
           <h1 className="visually-hidden">Страница логина</h1>
@@ -34,7 +35,7 @@ class Login extends React.PureComponent<{}, LoginState> {
           
           {isStart
             ? <Button
-              className={`login__start-button`}
+              className="login__start-button"
               variant="contained"
               size="large"
               onClick={(evt) => {
