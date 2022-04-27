@@ -19,13 +19,13 @@ interface LoginFormProps {
   login({}): AxiosInstance,
   loginError: null | string,
   popup: null | string,
-}
+};
 
 interface LoginFormState {
   mode: "signIn" | "signUp",
   loginValue: string,
   passwordValue: string,
-}
+};
 
 class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
 
