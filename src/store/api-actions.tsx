@@ -33,12 +33,21 @@ const login = (userData) => (dispatch, _getState, api) => (
     })
 );
 
-const fetchContacts = (user) => (dispatch, _getState, api) => (
-  api.get(`/userContacts?email=${user}`)
-    .then(({data}) => dispatch(ActionCreator.loadContacts(data[0]?.contacts || [])))
+const fetchContacts = (userId) => (dispatch, _getState, api) => (
+  api.get(`/userContacts/${userId}`)
+    .then(({data}) => dispatch(ActionCreator.loadContacts(data.contacts)))
     .catch((error) => {
       throw error;
     })
 );
 
-export {register, login, fetchContacts};
+const postContacts = (userId, contacts) => (dispatch, _getState, api) => (
+  api.put(`/userContacts/${userId}`, {contacts: contacts})
+    .then(({data}) => dispatch(ActionCreator.loadContacts(data.contacts)))
+    .catch((error) => {
+      throw error;
+    })
+
+);
+
+export {register, login, fetchContacts, postContacts};

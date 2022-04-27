@@ -4,7 +4,7 @@ import {Button} from "@mui/material";
 import {AxiosInstance} from "axios";
 
 import {ActionCreator} from "../../store/action";
-import {fetchContacts} from "../../store/api-actions";
+import {fetchContacts, postContacts} from "../../store/api-actions";
 
 import Logo from "../logo/logo";
 import Contacts from "../contacts/contacts";
@@ -13,12 +13,13 @@ interface PhoneBookProps {
   updateAuth: any,
   contacts: any,
   loadUserInfo: any,
-  userEmail: string,
+  user: any,
   fetchContacts: AxiosInstance,
+  postContacts: AxiosInstance,
 };
 
 interface PhoneBookState {
-  contacts: any[],
+  contacts: any,
 };
 
 const ContactsMock = [
@@ -51,8 +52,8 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
   }
 
   componentDidMount(): void {
-    const {fetchContacts, userEmail, contacts} = this.props;
-    fetchContacts(userEmail);
+    const {fetchContacts, user, contacts} = this.props;
+    fetchContacts(user.id);
     this.setState({contacts: contacts});
   }
 
@@ -68,23 +69,22 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
   editContact() {}
 
   deleteContact(id) {
-    const {contacts} = this.state;
+    const {user, postContacts, contacts} = this.props;
     const deletingIndex = contacts.findIndex((el) => el.id === id);
     const newContacts = contacts.slice();
     newContacts.splice(deletingIndex, 1);
-    this.setState({contacts: newContacts})
+    postContacts(user.id, newContacts);
   }
 
   render() {
-    const {userEmail} = this.props;
-    const {contacts} = this.state;
+    const {user, contacts} = this.props;
     
 
     return (
       <div className="phone-book">
         <h1 className="visually-hidden">ТЕЛЕФОННАЯ КНИГА</h1>
         <div className="phone-book__user-panel">
-          <span className="phone-book__userEmail">{userEmail}</span>
+          <span className="phone-book__userEmail">{user.email}</span>
           <button className="phone-book__exitButton" onClick={this.exitButtonHandle}>Выйти</button>
         </div>
         <div className="phone-book__logo">
@@ -114,7 +114,7 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
 };
 
 const mapStateToProps = ({user, data}) => ({
-  userEmail: user.userInfo.email,
+  user: user.userInfo,
   contacts: data.contacts,
 });
 
@@ -125,8 +125,11 @@ const mapDispatchToProps = (dispatch) => ({
   loadUserInfo(userInfo) {
     dispatch(ActionCreator.loadUserInfo(userInfo));
   },
-  fetchContacts(user) {
-    dispatch(fetchContacts(user));
+  fetchContacts(userId) {
+    dispatch(fetchContacts(userId));
+  },
+  postContacts(userId, contacts) {
+    dispatch(postContacts(userId, contacts));
   }
 });
 
