@@ -6,8 +6,8 @@ const initialState = {
 
 const dataReducer = (state = initialState, action) => {
   switch (action.type) {
-    // case :
-    //   return ;
+    case ActionType.LOAD_CONTACTS:
+      return {...state, contacts: action.payload};
     default:
       return state;
   }

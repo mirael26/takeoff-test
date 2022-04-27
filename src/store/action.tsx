@@ -4,6 +4,7 @@ const ActionType = {
   UPDATE_LOGIN_ERROR: "UPDATE_LOGIN_ERROR",
   SHOW_POPUP: "SHOW_POPUP",
   REDIRECT_TO_ROUTE: "@@ui/REDIRECT_TO_ROUTE",
+  LOAD_CONTACTS: "LOAD_CONTACTS",
 };
 
 const ActionCreator = {
@@ -23,6 +24,10 @@ const ActionCreator = {
     type: ActionType.SHOW_POPUP,
     payload: popup
   }),
+  loadContacts: (contacts) => ({
+    type: ActionType.LOAD_CONTACTS,
+    payload: contacts
+  })
 };
 
 export {ActionCreator, ActionType};

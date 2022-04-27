@@ -9,7 +9,6 @@ const HttpCode = {
   LOGIN_SUCCESS: 200,
 };
 
-
 const register = (userData:{email: string, password: string}) => (dispatch, _getState, api) => (
   api.post("/register", userData)
     .then(() => dispatch(ActionCreator.updateLoginError(null)))
@@ -22,18 +21,24 @@ const register = (userData:{email: string, password: string}) => (dispatch, _get
 );
 
 const login = (userData) => (dispatch, _getState, api) => (
-
   api.post("/login", userData)
     .then((response) => dispatch(ActionCreator.loadUserInfo(response.data.user)))
     .then(() => dispatch(ActionCreator.updateLoginError(null)))
     .then(() => dispatch(ActionCreator.updateAuth(true)))
     .then(() => busDispatch({ type: ActionType.REDIRECT_TO_ROUTE, payload: "/contacts"}))
     .catch((error) => {
-      console.log(error)
       if (error.response.status !== HttpCode.LOGIN_SUCCESS) {
         dispatch(ActionCreator.updateLoginError(error.response.data));
       }
     })
 );
 
-export {register, login};
+const fetchContacts = (user) => (dispatch, _getState, api) => (
+  api.get(`/userContacts?email=${user}`)
+    .then(({data}) => dispatch(ActionCreator.loadContacts(data[0]?.contacts || [])))
+    .catch((error) => {
+      throw error;
+    })
+);
+
+export {register, login, fetchContacts};

@@ -1,16 +1,20 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import {Button} from "@mui/material";
+import {AxiosInstance} from "axios";
 
 import {ActionCreator} from "../../store/action";
+import {fetchContacts} from "../../store/api-actions";
 
 import Logo from "../logo/logo";
 import Contacts from "../contacts/contacts";
 
 interface PhoneBookProps {
   updateAuth: any,
+  contacts: any,
   loadUserInfo: any,
   userEmail: string,
+  fetchContacts: AxiosInstance,
 };
 
 interface PhoneBookState {
@@ -37,10 +41,19 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     super(props)
 
     this.state = {
-      contacts: ContactsMock,
+      contacts: [],
     }
 
+    this.addContact = this.addContact.bind(this);
+    this.editContact = this.editContact.bind(this);
+    this.deleteContact = this.deleteContact.bind(this);
     this.exitButtonHandle = this.exitButtonHandle.bind(this);
+  }
+
+  componentDidMount(): void {
+    const {fetchContacts, userEmail, contacts} = this.props;
+    fetchContacts(userEmail);
+    this.setState({contacts: contacts});
   }
 
   exitButtonHandle() {
@@ -50,9 +63,22 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     loadUserInfo({});
   }
 
+  addContact() {}
+
+  editContact() {}
+
+  deleteContact(id) {
+    const {contacts} = this.state;
+    const deletingIndex = contacts.findIndex((el) => el.id === id);
+    const newContacts = contacts.slice();
+    newContacts.splice(deletingIndex, 1);
+    this.setState({contacts: newContacts})
+  }
+
   render() {
     const {userEmail} = this.props;
     const {contacts} = this.state;
+    
 
     return (
       <div className="phone-book">
@@ -67,7 +93,10 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
         
         {contacts.length === 0
           ? <span className="phone-book__add-caption">Добавьте ваш первый контакт</span>
-          : <Contacts contacts={contacts} />
+          : <Contacts
+              contacts={contacts}
+              deleteContact={this.deleteContact}
+            />
         }
         
         <Button
@@ -77,13 +106,16 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
         >
           Добавить контакт
         </Button>
+
+        {/* Попап-форма добавления и редактирования */}
       </div>
     );
   }
 };
 
-const mapStateToProps = ({user}) => ({
+const mapStateToProps = ({user, data}) => ({
   userEmail: user.userInfo.email,
+  contacts: data.contacts,
 });
 
 const mapDispatchToProps = (dispatch) => ({
@@ -91,7 +123,10 @@ const mapDispatchToProps = (dispatch) => ({
     dispatch(ActionCreator.updateAuth(authStatus));
   },
   loadUserInfo(userInfo) {
-    dispatch(ActionCreator.loadUserInfo(userInfo))
+    dispatch(ActionCreator.loadUserInfo(userInfo));
+  },
+  fetchContacts(user) {
+    dispatch(fetchContacts(user));
   }
 });
 
