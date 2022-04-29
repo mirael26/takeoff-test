@@ -75,6 +75,7 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
   signUp(userData) {
     const {register} = this.props;
     register(userData);
+    //TODO: отправить пустой массив контактов на сервер
   }
 
   render(): JSX.Element {
@@ -92,12 +93,13 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
       >
         <TextField
           className="login-form__login"
-          id="email" label="E-mail"
+          id="email"
+          label="E-mail"
           variant="outlined"
           type="email"
           required
           margin="normal"
-          value={this.state.loginValue}
+          value={loginValue}
           onChange={(evt) => this.handleLoginChange(evt)} />
 
         <TextField
@@ -107,8 +109,9 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
           variant="outlined"
           type="password"
           required
-          value={this.state.passwordValue}
+          value={passwordValue}
           onChange={(evt) => this.handlePasswordChange(evt)} />
+          
         {loginError
           ? <span className="login-form__error-text">{loginError}</span>
           : ""}

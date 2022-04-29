@@ -5,10 +5,11 @@ import DeleteIcon from '@mui/icons-material/Delete';
 
 interface ContactsProps {
   contacts: any[],
+  editButtonHandle(any): void,
   deleteContact(string): void
 };
 
-const Contacts = ({contacts, deleteContact}: ContactsProps) => {
+const Contacts = ({contacts, editButtonHandle, deleteContact}: ContactsProps) => {
   return (
     <table className="contacts">
       <tbody>
@@ -18,7 +19,7 @@ const Contacts = ({contacts, deleteContact}: ContactsProps) => {
             <td className="contacts__context">{contact.context}</td>
             <td className="contacts__phone">{contact.phone}</td>
             <td className="contacts__control">
-              <IconButton className="contacts__edit-button" size="small" aria-label="edit">
+              <IconButton className="contacts__edit-button" size="small" aria-label="edit" onClick={() => editButtonHandle(contact)}>
                 <EditIcon className="contacts__edit-icon" />
               </IconButton>
               <IconButton className="contacts__delete-button" aria-label="delete" onClick={() => deleteContact(contact.id)}>

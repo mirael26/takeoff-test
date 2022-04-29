@@ -8,6 +8,7 @@ import {fetchContacts, postContacts} from "../../store/api-actions";
 
 import Logo from "../logo/logo";
 import Contacts from "../contacts/contacts";
+import ContactEditForm from "../contact-edit-form/contact-edit-form";
 
 interface PhoneBookProps {
   updateAuth: any,
@@ -20,6 +21,7 @@ interface PhoneBookProps {
 
 interface PhoneBookState {
   contacts: any,
+  isEditingMode: boolean
 };
 
 const ContactsMock = [
@@ -38,17 +40,23 @@ const ContactsMock = [
 ];
 
 class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
+  changingContact: any;
+
   constructor(props) {
     super(props)
 
     this.state = {
       contacts: [],
+      isEditingMode: false,
     }
+    this.changingContact = null;
 
-    this.addContact = this.addContact.bind(this);
     this.editContact = this.editContact.bind(this);
+    this.editButtonHandle = this.editButtonHandle.bind(this);
     this.deleteContact = this.deleteContact.bind(this);
     this.exitButtonHandle = this.exitButtonHandle.bind(this);
+    this.changeEditingMode = this.changeEditingMode.bind(this);
+    this.addContactButtonHandle = this.addContactButtonHandle.bind(this);
   }
 
   componentDidMount(): void {
@@ -64,9 +72,28 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     loadUserInfo({});
   }
 
-  addContact() {}
+  editContact(newContact, isContactNew) {
+    const {user, contacts, postContacts} = this.props;
+    let newContacts: any = [];
+    if (isContactNew) {
+      newContacts = contacts;
+      newContacts.push(newContact)
+    } else {
+      newContacts = contacts.map((contact) => {
+        if (contact.id === newContact.id) {
+          return newContact;
+        }
+        return contact;
+      });
+    };
+    this.changeEditingMode();
+    postContacts(user.id, newContacts);
+  }
 
-  editContact() {}
+  editButtonHandle(contact) {
+    this.changingContact = contact;
+    this.changeEditingMode();
+  }
 
   deleteContact(id) {
     const {user, postContacts, contacts} = this.props;
@@ -76,10 +103,19 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     postContacts(user.id, newContacts);
   }
 
+  changeEditingMode() {
+    this.setState({isEditingMode: !this.state.isEditingMode});
+  }
+
+  addContactButtonHandle() {
+    this.changingContact = null;
+    this.changeEditingMode();
+  }
+
   render() {
     const {user, contacts} = this.props;
+    const {isEditingMode} = this.state;
     
-
     return (
       <div className="phone-book">
         <h1 className="visually-hidden">ТЕЛЕФОННАЯ КНИГА</h1>
@@ -91,23 +127,29 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
           <Logo />
         </div>
         
-        {contacts.length === 0
-          ? <span className="phone-book__add-caption">Добавьте ваш первый контакт</span>
-          : <Contacts
-              contacts={contacts}
-              deleteContact={this.deleteContact}
-            />
+        {isEditingMode
+          ? <ContactEditForm
+              contact={this.changingContact}
+              editContact={this.editContact}
+              changeEditingMode={this.changeEditingMode} />
+          : <div>
+            {contacts.length === 0
+              ? <span className="phone-book__add-caption">Добавьте ваш первый контакт</span>
+              : <Contacts
+                  contacts={contacts}
+                  editButtonHandle={this.editButtonHandle}
+                  deleteContact={this.deleteContact}
+                />
+            }
+            
+            <Button
+              className="phone-book__add-contact"
+              variant="contained"
+              onClick={() => this.addContactButtonHandle()}>
+                Добавить контакт
+            </Button>
+          </div>
         }
-        
-        <Button
-          className="phone-book__add-contact"
-          variant="contained"
-          // onClick={() => {}}
-        >
-          Добавить контакт
-        </Button>
-
-        {/* Попап-форма добавления и редактирования */}
       </div>
     );
   }

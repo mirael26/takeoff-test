@@ -1,0 +1,24 @@
+.contact-edit-form {
+  width: 300px;
+  display: flex;
+  flex-direction: column;
+}
+
+.contact-edit-form__buttons {
+  display: flex;
+  justify-content: space-between;
+  margin-top: 20px;
+}
+
+.MuiButton-root.contact-edit-form__save-button {
+  background-color: $ocean;
+
+  &:hover {
+    background-color: $ocean;
+  }
+}
+  
+.MuiButton-root.contact-edit-form__cancel-button {
+  border-color: $ocean;
+  color: $ocean;
+}
