@@ -102,9 +102,10 @@ class ContactEditForm extends React.PureComponent<ContactEditFormProps, ContactE
           id="phone"
           label="Телефон"
           variant="outlined"
-          type="phone"
+          type="tel"
           required
           margin="dense"
+          inputProps={{pattern:"^(((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10})$"}}
           value={phoneValue}
           onChange={(evt) => this.handleInputChange(evt)} />
 
