@@ -75,7 +75,6 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
   signUp(userData) {
     const {register} = this.props;
     register(userData);
-    //TODO: отправить пустой массив контактов на сервер
   }
 
   render(): JSX.Element {

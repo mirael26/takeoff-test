@@ -11,12 +11,20 @@ const HttpCode = {
 
 const register = (userData:{email: string, password: string}) => (dispatch, _getState, api) => (
   api.post("/register", userData)
+    .then(({data}) => dispatch(registerContacts(data.user.id)))
     .then(() => dispatch(ActionCreator.updateLoginError(null)))
     .then(() => dispatch(ActionCreator.showPopup(Popup.REGISTRATION_SUCCESSFUL)))
     .catch((error) => {
       if (error.response.status !== HttpCode.REGISTER_SUCCESS) {
         dispatch(ActionCreator.updateLoginError(error.response.data));
       }
+    })
+);
+
+const registerContacts = (userId) => (dispatch, _getState, api) => (
+  api.post("/userContacts", {id: userId, contacts: []})
+    .catch((error) => {
+      throw error;
     })
 );
 
