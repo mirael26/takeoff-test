@@ -9,6 +9,7 @@ import {fetchContacts, postContacts} from "../../store/api-actions";
 import Logo from "../logo/logo";
 import Contacts from "../contacts/contacts";
 import ContactEditForm from "../contact-edit-form/contact-edit-form";
+import Search from "../search/search";
 
 interface PhoneBookProps {
   updateAuth: any,
@@ -21,7 +22,8 @@ interface PhoneBookProps {
 
 interface PhoneBookState {
   contacts: any,
-  isEditingMode: boolean
+  isEditingMode: boolean,
+  searchedContacts: any,
 };
 
 const ContactsMock = [
@@ -48,6 +50,7 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     this.state = {
       contacts: [],
       isEditingMode: false,
+      searchedContacts: null,
     }
     this.changingContact = null;
 
@@ -57,6 +60,7 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     this.exitButtonHandle = this.exitButtonHandle.bind(this);
     this.changeEditingMode = this.changeEditingMode.bind(this);
     this.addContactButtonHandle = this.addContactButtonHandle.bind(this);
+    this.displaySearched = this.displaySearched.bind(this);
   }
 
   componentDidMount(): void {
@@ -104,6 +108,9 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
   }
 
   changeEditingMode() {
+    if (this.state.isEditingMode) {
+      this.displaySearched(null);
+    }
     this.setState({isEditingMode: !this.state.isEditingMode});
   }
 
@@ -112,9 +119,13 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     this.changeEditingMode();
   }
 
+  displaySearched(searchedContacts) {
+    this.setState({searchedContacts: searchedContacts});
+  }
+
   render() {
     const {user, contacts} = this.props;
-    const {isEditingMode} = this.state;
+    const {isEditingMode, searchedContacts} = this.state;
     
     return (
       <div className="phone-book">
@@ -132,14 +143,17 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
               contact={this.changingContact}
               editContact={this.editContact}
               changeEditingMode={this.changeEditingMode} />
-          : <div>
+          : <div className="phone-book__wrapper">
             {contacts.length === 0
               ? <span className="phone-book__add-caption">Добавьте ваш первый контакт</span>
-              : <Contacts
-                  contacts={contacts}
-                  editButtonHandle={this.editButtonHandle}
-                  deleteContact={this.deleteContact}
-                />
+              : <div>
+                <Search contacts={contacts} displaySearched={this.displaySearched} />
+                <Contacts
+                    contacts={searchedContacts === null ? contacts : searchedContacts}
+                    editButtonHandle={this.editButtonHandle}
+                    deleteContact={this.deleteContact}
+                  />
+                </div>
             }
             
             <Button

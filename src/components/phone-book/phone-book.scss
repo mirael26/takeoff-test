@@ -39,6 +39,10 @@
   font-size: 20px;
 }
 
+.phone-book__wrapper {
+  min-width: 622px;
+}
+
 .MuiButton-root.phone-book__add-contact {
   margin-left: 15px;
   background-color: $ocean;
