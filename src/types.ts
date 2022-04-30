@@ -1,3 +1,7 @@
+import { Axios } from "axios";
+import { CombinedState } from "redux";
+import { ThunkDispatch } from "redux-thunk";
+
 enum ActionTypes {
   UPDATE_AUTH = "UPDATE_AUTH",
   LOAD_USER_INFO = "LOAD_USER_INFO",
@@ -24,6 +28,26 @@ interface UserInfoFromServer extends UserInfo {
   id: number,
 }
 
+interface DataState {
+  contacts: Contacts,
+}
+
+interface StateState {
+  loginError: null | string,
+  popup: null | string,
+}
+
+interface UserState {
+  authStatus: boolean,
+  userInfo: {} | UserInfo,
+}
+
+type Dispatch = ThunkDispatch<CombinedState<{
+  data: DataState;
+  user: UserState;
+  state: StateState;
+}>, Axios, Action>;
+
 interface UpdateAuthAction {
   type: ActionTypes.UPDATE_AUTH,
   payload: boolean
@@ -31,7 +55,7 @@ interface UpdateAuthAction {
 
 interface LoadUserInfoAction {
   type: ActionTypes.LOAD_USER_INFO,
-  payload: UserInfo
+  payload: UserInfoFromServer | {}
 }
 
 interface UpdateLoginErrorAction {
@@ -50,7 +74,20 @@ interface LoadContactsAction {
 }
 
 
-export {Contact, Contacts, UserInfo, UserInfoFromServer, UpdateAuthAction, LoadUserInfoAction, UpdateLoginErrorAction, ShowPopupAction, LoadContactsAction, ActionTypes};
+export {Contact,
+  Contacts,
+  UserInfo,
+  UserInfoFromServer,
+  Dispatch,
+  DataState,
+  StateState,
+  UserState,
+  UpdateAuthAction,
+  LoadUserInfoAction,
+  UpdateLoginErrorAction,
+  ShowPopupAction,
+  LoadContactsAction,
+  ActionTypes};
 export type UserAction = UpdateAuthAction | LoadUserInfoAction;
 export type StateAction = UpdateLoginErrorAction | ShowPopupAction;
 export type DataAction = LoadContactsAction;

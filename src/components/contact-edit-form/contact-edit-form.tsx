@@ -1,15 +1,17 @@
 import * as React from "react";
 import {Button, TextField} from "@mui/material";
-import { nanoid } from 'nanoid';
+import {nanoid} from 'nanoid';
+
+import {Contact} from "../../types";
 
 interface ContactEditFormProps {
-  contact: any,
-  editContact: any,
-  changeEditingMode():void,
+  contact: Contact,
+  editContact (newContact: Contact, isContactNew: boolean): void,
+  changeEditingMode (): void,
 }
 
 interface ContactEditFormState {
-  id: number,
+  id: string | null,
   nameValue: string,
   contextValue: string,
   phoneValue: string,
@@ -18,7 +20,7 @@ interface ContactEditFormState {
 class ContactEditForm extends React.PureComponent<ContactEditFormProps, ContactEditFormState> {
   isContactNew: boolean;
 
-  constructor(props) {
+  constructor(props: ContactEditFormProps) {
     super(props);
 
     this.state = {
@@ -47,15 +49,16 @@ class ContactEditForm extends React.PureComponent<ContactEditFormProps, ContactE
     }
   }
 
-  handleInputChange(evt) {
+  handleInputChange(evt: React.ChangeEvent<HTMLInputElement>): void {
     const property = `${evt.target.id}Value`;
     const inputValue = evt.target.value;
-    const newState = {};
-    newState[property] = inputValue;
-    this.setState(newState);
+    type Property = 'nameValue' | 'contextValue' | 'phoneValue';
+    type NewState = {[key in Property]: string}
+    const newState = {[property]: inputValue};
+    this.setState(newState as NewState);
   }
 
-  handleFormSubmit(evt) {
+  handleFormSubmit(evt: React.SyntheticEvent):void {
     evt.preventDefault();
     const {editContact} = this.props;
     const {id, nameValue, contextValue, phoneValue} = this.state;
@@ -69,11 +72,11 @@ class ContactEditForm extends React.PureComponent<ContactEditFormProps, ContactE
     editContact(newContact, this.isContactNew);
   }
 
-  render() {
+  render(): JSX.Element {
     const {changeEditingMode} = this.props;
     const {nameValue, contextValue, phoneValue} = this.state;
     return (
-      <form className="contact-edit-form" onSubmit={(evt) => this.handleFormSubmit(evt)}>
+      <form className="contact-edit-form" onSubmit={this.handleFormSubmit}>
         <TextField
           className="contact-edit-form__text-field"
           id="name"
@@ -84,7 +87,7 @@ class ContactEditForm extends React.PureComponent<ContactEditFormProps, ContactE
           margin="dense"
           inputProps={{pattern:"^[a-zA-Zа-яА-Я0-9 ]*$"}}
           value={nameValue}
-          onChange={(evt) => this.handleInputChange(evt)} />
+          onChange={this.handleInputChange} />
 
         <TextField
           className="contact-edit-form__text-field"
@@ -95,7 +98,7 @@ class ContactEditForm extends React.PureComponent<ContactEditFormProps, ContactE
           margin="dense"
           inputProps={{pattern:"^[a-zA-Zа-яА-Я0-9 ]*$"}}
           value={contextValue}
-          onChange={(evt) => this.handleInputChange(evt)} />
+          onChange={this.handleInputChange} />
 
         <TextField
           className="contact-edit-form__text-field"
@@ -107,7 +110,7 @@ class ContactEditForm extends React.PureComponent<ContactEditFormProps, ContactE
           margin="dense"
           inputProps={{pattern:"^(((8|\\+7)[\\- ]?)?(\\(?\\d{3}\\)?[\\- ]?)?[\\d\\- ]{7,10})$"}}
           value={phoneValue}
-          onChange={(evt) => this.handleInputChange(evt)} />
+          onChange={this.handleInputChange} />
 
         <div className="contact-edit-form__buttons">
           <Button

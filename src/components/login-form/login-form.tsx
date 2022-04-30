@@ -1,13 +1,14 @@
 import * as React from "react";
 import {connect} from "react-redux";
-import {Navigate} from "react-router-dom";
-import {AxiosInstance} from "axios";
+import {Axios, AxiosInstance} from "axios";
 import {TextField, Button} from "@mui/material";
-
-import MessagePopup from "../message-popup/message-popup";
 
 import {register, login} from "../../store/api-actions";
 import {Popup, PopupContent} from "../../const";
+import {Dispatch, UserInfo} from "../../types";
+import {Reducer} from "../../store/store";
+
+import MessagePopup from "../message-popup/message-popup";
 
 const Mode = {
   SIGN_IN: "signIn",
@@ -15,8 +16,8 @@ const Mode = {
 } as const;
 
 interface LoginFormProps {
-  register({}): AxiosInstance,
-  login({}): AxiosInstance,
+  register(userData: UserInfo): AxiosInstance,
+  login(userData: UserInfo): AxiosInstance,
   loginError: null | string,
   popup: null | string,
 };
@@ -29,7 +30,7 @@ interface LoginFormState {
 
 class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
 
-  constructor(props) {
+  constructor(props: LoginFormProps) {
     super(props);
     this.state = {
       mode: Mode.SIGN_IN,
@@ -39,40 +40,40 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
 
     this.handleLoginChange = this.handleLoginChange.bind(this);
     this.handlePasswordChange = this.handlePasswordChange.bind(this);
-    this.handleSubmit = this.handleSubmit.bind(this);
+    this.handleFormSubmit = this.handleFormSubmit.bind(this);
   }
 
-  clearInputs() {
+  clearInputs(): void {
     this.setState({
       loginValue: "",
       passwordValue: "",
     });
   };
 
-  handleLoginChange(evt) {
+  handleLoginChange(evt: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({
       loginValue: evt.target.value
     });
   };
 
-  handlePasswordChange(evt) {
+  handlePasswordChange(evt: React.ChangeEvent<HTMLInputElement>): void {
     this.setState({
       passwordValue: evt.target.value
     });
   };
 
-  handleSubmit(userData) {
+  handleFormSubmit(userData: UserInfo): void {
     this.state.mode === Mode.SIGN_IN
       ? this.signIn(userData)
       : this.signUp(userData)
   }
 
-  signIn(userData) {
+  signIn(userData: UserInfo): void {
     const {login} = this.props;
     login(userData);
   }
 
-  signUp(userData) {
+  signUp(userData: UserInfo): void {
     const {register} = this.props;
     register(userData);
   }
@@ -86,7 +87,7 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
         className="login-form"
         onSubmit={(evt) => {
           evt.preventDefault();
-          this.handleSubmit({email: loginValue, password: passwordValue})
+          this.handleFormSubmit({email: loginValue, password: passwordValue})
         }}
         
       >
@@ -99,7 +100,7 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
           required
           margin="normal"
           value={loginValue}
-          onChange={(evt) => this.handleLoginChange(evt)} />
+          onChange={this.handleLoginChange} />
 
         <TextField
           className="login-form__password"
@@ -109,7 +110,7 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
           type="password"
           required
           value={passwordValue}
-          onChange={(evt) => this.handlePasswordChange(evt)} />
+          onChange={this.handlePasswordChange} />
           
         {loginError
           ? <span className="login-form__error-text">{loginError}</span>
@@ -136,23 +137,23 @@ class LoginForm extends React.PureComponent<LoginFormProps, LoginFormState> {
         </div>
 
         {popup === Popup.REGISTRATION_SUCCESSFUL
-          ? <MessagePopup text={PopupContent[popup].text} buttonText={PopupContent[popup].buttonText} path="/"/>
-          : ""
+          ? <MessagePopup popup={PopupContent.REGISTRATION_SUCCESSFUL} path="/"/>
+          : null
         }
       </form>
     );
 }};
 
-const mapStateToProps = ({state}) => ({
+const mapStateToProps = ({state}: Reducer) => ({
   loginError: state.loginError,
   popup: state.popup,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  register(userData) {
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  register(userData: UserInfo): void {
     dispatch(register(userData));
   },
-  login(userData) {
+  login(userData: UserInfo): void {
     dispatch(login(userData));
   },  
 });

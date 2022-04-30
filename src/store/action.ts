@@ -1,4 +1,4 @@
-import {ActionTypes, UserInfo, Contacts, UpdateAuthAction, LoadUserInfoAction, UpdateLoginErrorAction, ShowPopupAction, LoadContactsAction} from "../types";
+import {ActionTypes, Contacts, UpdateAuthAction, LoadUserInfoAction, UpdateLoginErrorAction, ShowPopupAction, LoadContactsAction, UserInfoFromServer} from "../types";
 
 const ActionType = {
   UPDATE_AUTH: "UPDATE_AUTH",
@@ -14,7 +14,7 @@ const ActionCreator = {
     type: ActionTypes.UPDATE_AUTH,
     payload: authStatus
   }),
-  loadUserInfo: (userInfo: UserInfo): LoadUserInfoAction => ({
+  loadUserInfo: (userInfo: UserInfoFromServer | {}): LoadUserInfoAction => ({
     type: ActionTypes.LOAD_USER_INFO,
     payload: userInfo
   }),

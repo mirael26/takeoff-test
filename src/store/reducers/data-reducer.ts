@@ -1,10 +1,4 @@
-import {ActionType} from "../action";
-
-import {Contacts, DataAction} from "../../types";
-
-interface DataState {
-  contacts: Contacts,
-}
+import {ActionTypes, DataAction, DataState} from "../../types";
 
 const initialState: DataState = {
   contacts: [],
@@ -12,7 +6,7 @@ const initialState: DataState = {
 
 const dataReducer = (state = initialState, action: DataAction): DataState => {
   switch (action.type) {
-    case ActionType.LOAD_CONTACTS:
+    case ActionTypes.LOAD_CONTACTS:
       return {...state, contacts: action.payload};
     default:
       return state;

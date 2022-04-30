@@ -1,10 +1,11 @@
 import * as React from "react";
 import {connect} from "react-redux";
 import {Button} from "@mui/material";
-import {AxiosInstance} from "axios";
 
 import {ActionCreator} from "../../store/action";
 import {fetchContacts, postContacts} from "../../store/api-actions";
+import {Contact, Contacts as ContactsType, Dispatch, UserInfoFromServer} from "../../types";
+import {Reducer} from "../../store/store";
 
 import Logo from "../logo/logo";
 import Contacts from "../contacts/contacts";
@@ -12,39 +13,24 @@ import ContactEditForm from "../contact-edit-form/contact-edit-form";
 import Search from "../search/search";
 
 interface PhoneBookProps {
-  updateAuth: any,
-  contacts: any,
-  loadUserInfo: any,
-  user: any,
-  fetchContacts: AxiosInstance,
-  postContacts: AxiosInstance,
+  user: UserInfoFromServer,
+  contacts: ContactsType,
+  updateAuth (authStatus: boolean): void ,
+  loadUserInfo (userInfo: {}): void,
+  fetchContacts (userId: number): void,
+  postContacts (userId: number, contacts: ContactsType): void,
 };
 
 interface PhoneBookState {
-  contacts: any,
+  contacts: ContactsType,
   isEditingMode: boolean,
-  searchedContacts: any,
+  searchedContacts: null | ContactsType,
 };
 
-const ContactsMock = [
-  {
-    id: 123,
-    name: "Иван Иванов",
-    context: "Работа",
-    phone: "89231234569"
-  },
-  {
-    id: 1234,
-    name: "Петр Петров",
-    context: "Семья",
-    phone: "86543534569"
-  },
-];
-
 class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
-  changingContact: any;
+  changingContact: null | Contact;
 
-  constructor(props) {
+  constructor(props: PhoneBookProps) {
     super(props)
 
     this.state = {
@@ -69,19 +55,18 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     this.setState({contacts: contacts});
   }
 
-  exitButtonHandle() {
+  exitButtonHandle(): void {
     const {updateAuth, loadUserInfo} = this.props;
-
     updateAuth(false);
     loadUserInfo({});
   }
 
-  editContact(newContact, isContactNew) {
+  editContact(newContact: Contact, isContactNew: boolean): void {
     const {user, contacts, postContacts} = this.props;
-    let newContacts: any = [];
+    let newContacts: Contact[];
     if (isContactNew) {
       newContacts = contacts;
-      newContacts.push(newContact)
+      newContacts.push(newContact);
     } else {
       newContacts = contacts.map((contact) => {
         if (contact.id === newContact.id) {
@@ -94,14 +79,14 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     postContacts(user.id, newContacts);
   }
 
-  editButtonHandle(contact) {
+  editButtonHandle(contact: Contact): void {
     this.changingContact = contact;
     this.changeEditingMode();
   }
 
-  deleteContact(id) {
+  deleteContact(id: string): void {
     const {user, postContacts, contacts} = this.props;
-    const deletingIndex = contacts.findIndex((el) => el.id === id);
+    const deletingIndex = contacts.findIndex((el: Contact) => el.id === id);
     const newContacts = contacts.slice();
     newContacts.splice(deletingIndex, 1);
     postContacts(user.id, newContacts);
@@ -114,16 +99,16 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
     this.setState({isEditingMode: !this.state.isEditingMode});
   }
 
-  addContactButtonHandle() {
+  addContactButtonHandle(): void {
     this.changingContact = null;
     this.changeEditingMode();
   }
 
-  displaySearched(searchedContacts) {
+  displaySearched(searchedContacts: ContactsType) {
     this.setState({searchedContacts: searchedContacts});
   }
 
-  render() {
+  render(): JSX.Element {
     const {user, contacts} = this.props;
     const {isEditingMode, searchedContacts} = this.state;
     
@@ -169,22 +154,22 @@ class PhoneBook extends React.PureComponent<PhoneBookProps, PhoneBookState> {
   }
 };
 
-const mapStateToProps = ({user, data}) => ({
+const mapStateToProps = ({user, data}: Reducer) => ({
   user: user.userInfo,
   contacts: data.contacts,
 });
 
-const mapDispatchToProps = (dispatch) => ({
-  updateAuth(authStatus) {
+const mapDispatchToProps = (dispatch: Dispatch) => ({
+  updateAuth(authStatus: boolean): void {
     dispatch(ActionCreator.updateAuth(authStatus));
   },
-  loadUserInfo(userInfo) {
+  loadUserInfo(userInfo: {}): void {
     dispatch(ActionCreator.loadUserInfo(userInfo));
   },
-  fetchContacts(userId) {
+  fetchContacts(userId: number): void {
     dispatch(fetchContacts(userId));
   },
-  postContacts(userId, contacts) {
+  postContacts(userId: number, contacts: ContactsType): void {
     dispatch(postContacts(userId, contacts));
   }
 });

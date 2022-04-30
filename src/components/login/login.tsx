@@ -9,18 +9,27 @@ interface LoginState {
 }
 
 class Login extends React.PureComponent<{}, LoginState> {
-  constructor(props) {
+  constructor(props: {}) {
     super(props);
     this.state = {
       view: "start"
     };
+
     this.deleteElementInTime = this.deleteElementInTime.bind(this);
+    this.handleStartButtonClick = this.handleStartButtonClick.bind(this);
   }
 
-  deleteElementInTime(element, time) {
+  deleteElementInTime(element: HTMLButtonElement, time:number): void {
     window.setTimeout(() => {
       element.style.display = "none";
     }, time)
+  }
+
+  handleStartButtonClick(evt: React.MouseEvent<HTMLButtonElement>, time: number):void {
+    this.setState({
+      view: "login"
+    });
+    this.deleteElementInTime(evt.target as HTMLButtonElement, time);
   }
 
   render(): JSX.Element {
@@ -38,12 +47,7 @@ class Login extends React.PureComponent<{}, LoginState> {
               className="login__start-button"
               variant="contained"
               size="large"
-              onClick={(evt) => {
-                this.setState({
-                  view: "login"
-                });
-                this.deleteElementInTime(evt.target, 1000);
-              }}
+              onClick={(evt) => this.handleStartButtonClick(evt, 1000)}
               >
                 Начать
             </Button>

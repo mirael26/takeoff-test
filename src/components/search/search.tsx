@@ -1,20 +1,25 @@
 import * as React from "react";
 import {FormControl, IconButton, Input, InputAdornment, InputLabel} from "@mui/material";
 import SearchIcon from '@mui/icons-material/Search';
+import { Contact, Contacts } from "../../types";
 
-const Search = ({contacts, displaySearched}) => {
-  const search = (evt) => {
+interface SearchProps {
+  contacts: Contacts,
+  displaySearched (searchedContacts: Contacts): void,
+}
+
+const Search = ({contacts, displaySearched}: SearchProps) => {
+  const search = (evt: React.ChangeEvent<HTMLInputElement>): void => {
     const searchingText = evt.target.value;
     if (searchingText === "") {
       displaySearched(null);
       return;
     }
 
-    const searchedContacts = contacts.filter((contact) => {
+    const searchedContacts = contacts.filter((contact: Contact) => {
       const searchRegexp = new RegExp(`^${searchingText}| ${searchingText}`, 'i');
       return searchRegexp.test(contact.name);
     });
-    console.log(searchedContacts);
     displaySearched(searchedContacts);
   }
 
@@ -25,7 +30,7 @@ const Search = ({contacts, displaySearched}) => {
           <Input
             id="contact-search"
             type="text"
-            onChange={(evt) => search(evt)}
+            onChange={search}
             endAdornment={
               <InputAdornment position="end">
                 <IconButton disabled>
