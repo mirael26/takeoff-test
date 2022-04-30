@@ -1,11 +1,17 @@
-import { ActionType } from "../action";
+import {ActionType} from "../action";
+import {UserInfo, UserAction} from "../../types";
 
-const initialState = {  
+interface UserState {
+  authStatus: boolean,
+  userInfo: {} | UserInfo,
+}
+
+const initialState: UserState = {  
   authStatus: false,
   userInfo: {},
 };
 
-const userReducer = (state = initialState, action) => {
+const userReducer = (state = initialState, action: any): UserState => {
   switch (action.type) {
     case ActionType.UPDATE_AUTH:
       return {...state, authStatus: action.payload};

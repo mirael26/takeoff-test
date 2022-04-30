@@ -5,10 +5,10 @@ import thunk from "redux-thunk";
 import {dataReducer} from "./reducers/data-reducer";
 import {userReducer} from "./reducers/user-reducer";
 import {stateReducer} from "./reducers/state-reducer";
-import {createAPI} from "./../api/api";
+import {createAPI} from "../api/api";
 import {ActionCreator} from "./action";
 
-const saveToLocalStorage = (state) => {
+const saveToLocalStorage = (state: Reducer) => {
   try {
     localStorage.setItem('state', JSON.stringify(state));
   } catch (e) {
@@ -34,9 +34,13 @@ const rootReducer = combineReducers({
   state: stateReducer,
 });
 
+type Reducer = ReturnType<typeof rootReducer>;
+
 const api = createAPI(
   () => store.dispatch(ActionCreator.updateAuth(false))
 );
+
+type Api = ReturnType<typeof api>;
 
 const store = createStore(
   rootReducer,
@@ -46,8 +50,10 @@ const store = createStore(
   )
 );
 
+
 store.subscribe(() => {
   saveToLocalStorage(store.getState());
 });
 
 export default store;
+export {Reducer};

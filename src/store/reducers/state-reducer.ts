@@ -1,16 +1,17 @@
-import { ActionType } from "../action";
+import {ActionType} from "../action";
+import {StateAction} from "../../types";
 
-interface stateState {
+interface StateState {
   loginError: null | string,
   popup: null | string,
 }
 
-const initialState = {  
+const initialState: StateState = {  
   loginError: null,
   popup: null,
 };
 
-const stateReducer = (state:stateState = initialState, action) => {
+const stateReducer = (state = initialState, action: StateAction): StateState => {
   switch (action.type) {
     case ActionType.UPDATE_LOGIN_ERROR:
       return {...state, loginError: action.payload};

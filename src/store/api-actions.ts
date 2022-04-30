@@ -1,7 +1,11 @@
-import { dispatch as busDispatch }  from 'use-bus';
+import {dispatch as busDispatch}  from 'use-bus';
+import {ThunkAction} from 'redux-thunk';
+import {Axios, AxiosResponse} from 'axios';
 
 import {ActionType, ActionCreator} from "./action";
-import {Popup} from "./../const";
+import {Reducer} from "./store";
+import {Popup} from "../const";
+import {Action, UserInfo, ShowPopupAction, UpdateLoginErrorAction, LoadContactsAction, Contacts} from '../types';
 
 const HttpCode = {
   UNAUTHORIZED: 401,
@@ -9,7 +13,7 @@ const HttpCode = {
   LOGIN_SUCCESS: 200,
 };
 
-const register = (userData:{email: string, password: string}) => (dispatch, _getState, api) => (
+const register = (userData: UserInfo): ThunkAction<Promise<ShowPopupAction | UpdateLoginErrorAction | void>, Reducer, Axios, Action> => (dispatch, _getState, api) => (
   api.post("/register", userData)
     .then(({data}) => dispatch(registerContacts(data.user.id)))
     .then(() => dispatch(ActionCreator.updateLoginError(null)))
@@ -21,14 +25,14 @@ const register = (userData:{email: string, password: string}) => (dispatch, _get
     })
 );
 
-const registerContacts = (userId) => (dispatch, _getState, api) => (
+const registerContacts = (userId: number): ThunkAction<Promise<AxiosResponse<void | Error>>, Reducer, Axios, Action> => (dispatch, _getState, api) => (
   api.post("/userContacts", {id: userId, contacts: []})
     .catch((error) => {
       throw error;
     })
 );
 
-const login = (userData) => (dispatch, _getState, api) => (
+const login = (userData: UserInfo): ThunkAction<Promise<UpdateLoginErrorAction | void>, Reducer, Axios, Action> => (dispatch, _getState, api) => (
   api.post("/login", userData)
     .then((response) => dispatch(ActionCreator.loadUserInfo(response.data.user)))
     .then(() => dispatch(ActionCreator.updateLoginError(null)))
@@ -41,7 +45,7 @@ const login = (userData) => (dispatch, _getState, api) => (
     })
 );
 
-const fetchContacts = (userId) => (dispatch, _getState, api) => (
+const fetchContacts = (userId: number): ThunkAction<Promise<LoadContactsAction | Error>, Reducer, Axios, Action> => (dispatch, _getState, api) => (
   api.get(`/userContacts/${userId}`)
     .then(({data}) => dispatch(ActionCreator.loadContacts(data.contacts)))
     .catch((error) => {
@@ -49,7 +53,7 @@ const fetchContacts = (userId) => (dispatch, _getState, api) => (
     })
 );
 
-const postContacts = (userId, contacts) => (dispatch, _getState, api) => (
+const postContacts = (userId: number, contacts: Contacts): ThunkAction<Promise<LoadContactsAction | Error>, Reducer, Axios, Action> => (dispatch, _getState, api) => (
   api.put(`/userContacts/${userId}`, {contacts: contacts})
     .then(({data}) => dispatch(ActionCreator.loadContacts(data.contacts)))
     .catch((error) => {
