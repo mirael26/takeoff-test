@@ -12,12 +12,28 @@ interface ContactsProps {
 };
 
 const Contacts = ({contacts, editButtonHandle, deleteContact}: ContactsProps): JSX.Element => {
+
+  const sortAlphabetically = (contacts: Contacts): Contacts => {
+    const sortedContacts = contacts.slice().sort((a, b) => {
+      const nameA = a.name.toLowerCase();
+      const nameB = b.name.toLowerCase();
+      if (nameA < nameB) {
+        return -1;
+      }
+      if (nameA > nameB) {
+        return 1;
+      }
+      return 0;
+      });
+    return sortedContacts;
+  };
+
   return (    
     <table className="contacts">
     <tbody>
       {contacts.length === 0
         ? null
-        : contacts.map((contact, i) => {
+        : sortAlphabetically(contacts).map((contact, i) => {
           return <tr key={`contact-${i}`} className="contacts__row">
             <td className="contacts__name">{contact.name}</td>
             <td className="contacts__context">{contact.context}</td>
