@@ -1,7 +1,7 @@
 import * as React from "react";
 import * as ReactDOMClient from "react-dom/client";
 import { Provider } from "react-redux";
-import { BrowserRouter } from "react-router-dom";
+import { HashRouter } from "react-router-dom";
 
 import store from "./store/store";
 import App from "./components/app/app";
@@ -12,8 +12,8 @@ const root = ReactDOMClient.createRoot(document.getElementById('root') as HTMLDi
 
 root.render(
   <Provider store={store}>
-    <BrowserRouter>
+    <HashRouter>
         <App />
-    </BrowserRouter>
+    </HashRouter>
   </Provider>
 );
