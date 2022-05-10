@@ -11,6 +11,6 @@ frontend:
 1. клонировать текущий репозиторий
 2. запустить:
 - npm i
-- npm start
+- npm start / или / npm run build и открыть файл /dist/index.html
 
 node v16.13.0
